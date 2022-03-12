@@ -1,0 +1,24 @@
+name: Build and deploy ASP app to Azure Web App - man-old-app
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        dotnet-version: ["3.0", "3.1.x", "5.0.x", "6.0.x"]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup dotnet ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      # You can test your matrix by printing the current dotnet version
+      - name: Display dotnet version
+        run: dotnet --version
