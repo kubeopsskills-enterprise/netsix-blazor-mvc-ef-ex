@@ -58,7 +58,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: "app-appspoke-az-ince-dev-001"
+          app-name: "app-appspoke-az-ince-dev-002"
           slot-name: "Production"
           publish-profile: ${{ secrets.APP_APPSPOKE_PUBLISHFILE }}
           package: .
