@@ -39,7 +39,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: ${{ env.PACKAGE_NAME}}
-          path: "/published/**"
+          path: "./published/**"
 
   deploy:
     runs-on: self-hosted
