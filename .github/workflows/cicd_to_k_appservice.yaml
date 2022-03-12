@@ -3,7 +3,7 @@ name: Build and deploy ASP app to Azure Web App - man-old-app
 on:
   push:
     branches:
-      - main
+      - master
   workflow_dispatch:
 
 jobs:
