@@ -33,7 +33,7 @@ jobs:
 
       - name: Publish the project
         run: |
-          dotnet publish -c Release -o ./published --arch x86
+          dotnet publish -c Release -o ./published --arch x86 --no-cache
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
