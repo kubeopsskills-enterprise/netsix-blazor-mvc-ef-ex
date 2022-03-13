@@ -64,4 +64,4 @@ jobs:
           app-name: "app-appspoke-az-ince-dev-002"
           slot-name: "Production"
           publish-profile: ${{ secrets.APP_APPSPOKE_PUBLISHFILE }}
-          package: .
+          package: ./netsix-blazor-mvc-ef-ex
