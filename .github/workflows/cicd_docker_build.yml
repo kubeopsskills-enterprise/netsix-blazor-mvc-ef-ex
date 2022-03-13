@@ -1,9 +1,10 @@
 name: Build and deploy .Net6
 
 on:
-  push:
-    branches:
-      - master
+  workflow_call:
+#  push:
+#    branches:
+#      - master
 env:
   PACKAGE_NAME: netsix-blazor-mvc-ef-ex
   

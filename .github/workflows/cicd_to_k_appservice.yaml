@@ -1,7 +1,10 @@
 name: Build and deploy ASP app to Azure Web App - man-old-app
 
 on:
-  workflow_call: 
+  #workflow_call:
+  push:
+    branches:
+      - master
 
 jobs:
   build:
@@ -37,6 +40,9 @@ jobs:
         with:
           name: ${{ env.PACKAGE_NAME}}
           path: "./published/**"
+          
+      - name: FileCheck
+        run: ls -la
 
   deploy:
     runs-on: self-hosted
