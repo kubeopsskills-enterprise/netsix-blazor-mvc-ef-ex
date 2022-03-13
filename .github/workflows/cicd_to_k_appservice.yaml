@@ -58,6 +58,9 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: ${{ env.PACKAGE_NAME}}
+          
+      - name: File Check
+        run: ls -la
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
