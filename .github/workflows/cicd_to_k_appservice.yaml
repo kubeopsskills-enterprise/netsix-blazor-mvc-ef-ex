@@ -42,9 +42,7 @@ jobs:
           path: "./published/**"
           
       - name: FileCheck
-        run: |
-          ls -la
-          ls -la ./published
+        run: ls -la && ls -la ./published
 
   deploy:
     runs-on: self-hosted
