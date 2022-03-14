@@ -363,3 +363,6 @@ MigrationBackup/
 FodyWeavers.xsd
 
 .idea
+
+DesignTimeSetting.json
+appsetting.custom.json

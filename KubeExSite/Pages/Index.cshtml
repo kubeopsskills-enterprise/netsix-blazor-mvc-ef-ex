@@ -1,4 +1,5 @@
 ﻿@page
+@using KubeExSite.Context.Models
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
@@ -7,4 +8,24 @@
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <table>
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Topic</th>
+            <th>Body</th>
+        </tr>
+        </thead>
+        @if (ViewData["routine_reports"] != null)
+        {
+            foreach (var each in (IEnumerable<RoutineReport>)ViewData["routine_reports"]!)
+            {
+                <tr>
+                    <td>@each.Id</td>
+                    <td>@each.Topic</td>
+                    <td>@each.Body</td>
+                </tr>
+            }
+        }
+    </table>
 </div>
