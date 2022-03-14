@@ -15,6 +15,7 @@ if (!string.IsNullOrEmpty(vaultName))
 }
 
 // Add services to the container.
+builder.Services.AddHealthChecks();
 builder.Services.AddRazorPages();
 builder.Services.AddDbContext<KubeExContext>(optionsBuilder =>
 {
@@ -44,5 +45,6 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapRazorPages();
+app.UseHealthChecks("/healthz");
 
 app.Run();
