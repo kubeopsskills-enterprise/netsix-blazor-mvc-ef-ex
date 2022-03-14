@@ -9,9 +9,17 @@ var builder = WebApplication.CreateBuilder(args);
 var conf = builder.Configuration;
 conf.AddJsonFile("appsetting.custom.json", true);
 var vaultName = conf.GetValue<string>("KeyVaultName");
+builder.Services.AddApplicationInsightsTelemetry();
 if (!string.IsNullOrEmpty(vaultName))
 {
-    conf.AddAzureKeyVault(new Uri($"https://{vaultName}.vault.azure.net"), new DefaultAzureCredential());
+    try
+    {
+        conf.AddAzureKeyVault(new Uri($"https://{vaultName}.vault.azure.net"), new DefaultAzureCredential());
+    }
+    catch (Exception e)
+    {
+        Console.Error.Write(e.Message);
+    }
 }
 
 // Add services to the container.
