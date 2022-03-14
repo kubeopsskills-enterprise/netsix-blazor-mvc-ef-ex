@@ -2,6 +2,7 @@ using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using KubeExSite.Context;
+using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
@@ -9,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 var conf = builder.Configuration;
 conf.AddJsonFile("appsetting.custom.json", true);
 var vaultUrl = conf.GetValue<string>("KeyVaultUrl");
+
 builder.Services.AddApplicationInsightsTelemetry();
 if (!string.IsNullOrEmpty(vaultUrl))
 {
