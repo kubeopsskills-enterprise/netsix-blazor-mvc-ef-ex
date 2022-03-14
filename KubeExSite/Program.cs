@@ -14,7 +14,7 @@ if (!string.IsNullOrEmpty(vaultName))
 {
     try
     {
-        conf.AddAzureKeyVault(new Uri($"https://{vaultName}.vault.azure.net"), new DefaultAzureCredential());
+        conf.AddAzureKeyVault(new Uri($"https://{vaultName}.vault.azure.net/"), new DefaultAzureCredential());
     }
     catch (Exception e)
     {
