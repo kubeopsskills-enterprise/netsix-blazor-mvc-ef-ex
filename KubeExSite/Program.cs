@@ -9,11 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 var conf = builder.Configuration;
 conf.AddJsonFile("appsetting.custom.json", true);
 var vaultName = conf.GetValue<string>("KeyVaultName");
-if (conf.GetValue<bool>("OnAzureCloud") && !string.IsNullOrEmpty(vaultName))
-{
-    conf.AddAzureKeyVault(new Uri($"https://{vaultName}.privatelink.vaultcore.azure.net"), new DefaultAzureCredential());
-}
-else if (!string.IsNullOrEmpty(vaultName))
+if (!string.IsNullOrEmpty(vaultName))
 {
     conf.AddAzureKeyVault(new Uri($"https://{vaultName}.vault.azure.net"), new DefaultAzureCredential());
 }
