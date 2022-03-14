@@ -23,7 +23,7 @@ namespace KubeExSite.Pages
         {
             _logger.Log(LogLevel.Information,"CheckVaultUrl: "+_configuration.GetValue<string>("KeyVaultUrl"));
             _logger.Log(LogLevel.Information,"CheckDbConnectionKey: "+_configuration.GetValue<string>("DbConnectionKey"));
-            ViewData["routine_reports"] = _dbContext.RoutineReports.AsQueryable().Take(100).ToList();
+            ViewData["routine_reports"] = _dbContext.RoutineReports.AsQueryable().OrderBy(report => report.Id).Take(100).ToList();
 
             return Page();
         }
