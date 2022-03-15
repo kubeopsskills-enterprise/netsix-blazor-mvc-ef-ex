@@ -28,7 +28,7 @@ if (!string.IsNullOrEmpty(vaultUrl))
     {
         if (defaultIsFail)
         {
-            conf.AddAzureKeyVault(new Uri(vaultUrl),new ManagedIdentityCredential());
+            conf.AddAzureKeyVault(new Uri(vaultUrl),new ManagedIdentityCredential("3c221eb4-d9cf-4cf6-85e0-d931accf544c"));
         }
     }
     catch (Exception e)
