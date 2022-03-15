@@ -14,14 +14,27 @@ var vaultUrl = conf.GetValue<string>("KeyVaultUrl");
 builder.Services.AddApplicationInsightsTelemetry();
 if (!string.IsNullOrEmpty(vaultUrl))
 {
-    // try
-    // {
-        conf.AddAzureKeyVault(new Uri(vaultUrl), new DefaultAzureCredential());
-    // }
-    // catch (Exception e)
-    // {
-    //     Console.WriteLine(e.Message);
-    // }
+    var defaultIsFail = true;
+    try
+    {
+        conf.AddAzureKeyVault(new Uri(vaultUrl),new DefaultAzureCredential());
+        defaultIsFail = false;
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine(e.Message);
+    }
+    try
+    {
+        if (defaultIsFail)
+        {
+            conf.AddAzureKeyVault(new Uri(vaultUrl),new ManagedIdentityCredential());
+        }
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine(e.Message);
+    }
 }
 
 // Add services to the container.
