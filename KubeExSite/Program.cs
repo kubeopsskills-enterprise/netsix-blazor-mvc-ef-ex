@@ -2,6 +2,7 @@ using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using KubeExSite.Context;
+using KubeExSite.InjectServices;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
@@ -12,6 +13,7 @@ conf.AddJsonFile("appsetting.custom.json", true);
 var vaultUrl = conf.GetValue<string>("KeyVaultUrl");
 
 builder.Services.AddApplicationInsightsTelemetry();
+builder.Services.AddRedisService(conf);
 if (!string.IsNullOrEmpty(vaultUrl))
 {
     //var defaultIsFail = true;
