@@ -40,7 +40,7 @@ public class RedisController : ControllerBase
     {
         var db = _connectionMultiplexer.GetDatabase(1);
 
-        await db.StringSetAsync(key, value);
+        await db.StringSetAsync("ex_"+key, value);
 
         return Ok();
     }
