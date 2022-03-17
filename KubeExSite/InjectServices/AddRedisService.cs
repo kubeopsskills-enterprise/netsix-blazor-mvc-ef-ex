@@ -7,13 +7,14 @@ public static class AddCacheService
     public static void AddRedisService(this IServiceCollection services, IConfiguration configuration)
     {
         var conStr = configuration.GetValue<string>("Redis:ConnectionStr");
+        bool.TryParse(configuration.GetValue<string>("Redis:Enabled"), out bool enabled);
 
-        if (conStr != null)
+        if (enabled && conStr != null)
         {
             try
             {
                 var redisConStr = ConfigurationOptions.Parse(conStr);
-                redisConStr.ConnectRetry = 30;
+                redisConStr.ConnectRetry = 5;
                 
                 var redis = ConnectionMultiplexer.Connect(redisConStr);
                 if (redis.IsConnected)

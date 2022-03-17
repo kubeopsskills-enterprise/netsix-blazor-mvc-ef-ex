@@ -5,6 +5,7 @@ using KubeExSite.Context;
 using KubeExSite.InjectServices;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,33 +17,26 @@ builder.Services.AddApplicationInsightsTelemetry();
 builder.Services.AddRedisService(conf);
 if (!string.IsNullOrEmpty(vaultUrl))
 {
-    //var defaultIsFail = true;
     try
     {
         conf.AddAzureKeyVault(new Uri(vaultUrl),new DefaultAzureCredential());
-        //defaultIsFail = false;
     }
     catch (Exception e)
     {
         Console.WriteLine(e.Message);
     }
-    /*
-    try
-    {
-        if (defaultIsFail)
-        {
-            conf.AddAzureKeyVault(new Uri(vaultUrl),new ManagedIdentityCredential("3c221eb4-d9cf-4cf6-85e0-d931accf544c"));
-        }
-    }
-    catch (Exception e)
-    {
-        Console.WriteLine(e.Message);
-    }
-    */
 }
 
 // Add services to the container.
 builder.Services.AddHealthChecks();
+builder.Services
+    .AddControllers()
+    .AddNewtonsoftJson(
+    options =>
+    {
+        options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+        options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+    });
 builder.Services.AddRazorPages();
 builder.Services.AddDbContext<KubeExContext>(optionsBuilder =>
 {
@@ -52,7 +46,7 @@ builder.Services.AddDbContext<KubeExContext>(optionsBuilder =>
         conn = conf.GetValue<string>(conf.GetValue<string>("DbConnectionKey"));
     }
     var connectionBuilder = new NpgsqlConnectionStringBuilder(conn);
-    connectionBuilder.SslMode = SslMode.VerifyFull;
+    //connectionBuilder.SslMode = SslMode.VerifyFull;
     optionsBuilder.EnableDetailedErrors();
     
     optionsBuilder.UseNpgsql(connectionBuilder.ConnectionString).UseSnakeCaseNamingConvention();
@@ -71,7 +65,15 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+
 app.MapRazorPages();
-app.UseHealthChecks("/healthz");
+app.MapControllers();
+app.MapHealthChecks("/healthz");
+// app.UseEndpoints(endpoints =>
+// {
+//     endpoints.MapBlazorHub();
+//     endpoints.MapControllers();
+//     endpoints.MapHealthChecks("/healthz");
+// });
 
 app.Run();

@@ -1,8 +1,11 @@
+using KubeExSite.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using StackExchange.Redis;
 
 namespace KubeExSite.Controllers;
 
+
+[Route("api/redis")]
 [ApiController]
 public class RedisController : ControllerBase
 {
@@ -18,17 +21,14 @@ public class RedisController : ControllerBase
         var redisEndPoint = _connectionMultiplexer.GetEndPoints().FirstOrDefault();
         var redisServ = _connectionMultiplexer.GetServer(redisEndPoint);
 
-        Dictionary<string,string> strList = new Dictionary<string, string>();
-        await foreach (var key in redisServ.KeysAsync(pattern: "ex_*"))
+        List<TagDto> strList = new List<TagDto>();
+        await foreach (var key in redisServ.KeysAsync(1 ,pattern: "ex_*"))
         {
-            for (var i = 0; i < redisServ.DatabaseCount; i++)
+            var db = _connectionMultiplexer.GetDatabase(1);
+            var value = await db.StringGetAsync(key);
+            if (!string.IsNullOrEmpty(value))
             {
-                var db = _connectionMultiplexer.GetDatabase(i);
-                var value = await db.StringGetAsync(key);
-                if (string.IsNullOrEmpty(value))
-                {
-                    strList.Add(key, value);
-                }
+                strList.Add(new TagDto(){Key = key, Value = value});
             }
         }
         
@@ -36,11 +36,11 @@ public class RedisController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> SetCache(string key, string value)
+    public async Task<IActionResult> SetCache([FromBody]TagDto tagDto)
     {
         var db = _connectionMultiplexer.GetDatabase(1);
 
-        await db.StringSetAsync("ex_"+key, value);
+        await db.StringSetAsync("ex_"+tagDto.Key, tagDto.Value);
 
         return Ok();
     }
