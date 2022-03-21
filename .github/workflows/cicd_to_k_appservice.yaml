@@ -61,7 +61,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: "app-appspoke-az-ince-dev-002"
+          app-name: "app-net6-az-ince-dev-001"
           slot-name: "Production"
           publish-profile: ${{ secrets.APP_APPSPOKE_PUBLISHFILE }}
           package: ./netsix-blazor-mvc-ef-ex
