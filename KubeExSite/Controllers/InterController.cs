@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace KubeExSite.Controllers;
 
@@ -23,6 +24,8 @@ public class InterController : ControllerBase
 
         HttpClient client = new HttpClient();
         var result = await client.GetStringAsync(url + "/api/Values");
-        return Ok(string.IsNullOrEmpty(result) ? "NotFound" : result);
+        var strList = JsonConvert.DeserializeObject<List<string>>(result);
+        strList?.Add(url);
+        return Ok(strList == null || strList.Count == 0 ? "NotFound" : strList);
     }
 }
