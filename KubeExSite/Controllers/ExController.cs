@@ -40,5 +40,13 @@ namespace KubeExSite.Controllers
 
             return Ok();
         }
+
+        [HttpGet("check-headers")]
+        public IActionResult CheckHeader()
+        {
+            var headerList = _httpContextAccessor.HttpContext?.Request.Headers.ToList();
+
+            return Ok(headerList);
+        }
     }
 }
