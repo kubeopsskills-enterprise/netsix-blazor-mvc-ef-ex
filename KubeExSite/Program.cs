@@ -4,7 +4,9 @@ using Azure.Security.KeyVault.Secrets;
 using KubeExSite.Context;
 using KubeExSite.InjectServices;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Npgsql;
 
@@ -48,12 +50,23 @@ builder.Services.AddDbContext<KubeExContext>(optionsBuilder =>
     var connectionBuilder = new NpgsqlConnectionStringBuilder(conn);
     //connectionBuilder.SslMode = SslMode.VerifyFull;
     optionsBuilder.EnableDetailedErrors();
-    
-    optionsBuilder.UseNpgsql(connectionBuilder.ConnectionString).UseSnakeCaseNamingConvention();
+
+    //optionsBuilder.UseNpgsql(connectionBuilder.ConnectionString).UseSnakeCaseNamingConvention();
+    optionsBuilder.UseInMemoryDatabase("kube_ex").UseSnakeCaseNamingConvention();
 });
 
 var app = builder.Build();
 
+
+if (!conf.GetValue<string>("BaseUrl").IsNullOrEmpty())
+{
+    app.UsePathBase(conf.GetValue<string>("BaseUrl"));
+}
+
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.All
+});
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
