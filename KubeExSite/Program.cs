@@ -17,6 +17,7 @@ var vaultUrl = conf.GetValue<string>("KeyVaultUrl");
 
 builder.Services.AddApplicationInsightsTelemetry();
 builder.Services.AddRedisService(conf);
+builder.Services.AddHttpContextAccessor();
 if (!string.IsNullOrEmpty(vaultUrl))
 {
     try

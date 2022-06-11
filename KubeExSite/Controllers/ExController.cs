@@ -10,10 +10,12 @@ namespace KubeExSite.Controllers
     public class ExController : ControllerBase
     {
         private readonly IConfiguration _configuration;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ExController(IConfiguration configuration)
+        public ExController(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             _configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpGet("gen-list")]
@@ -22,6 +24,21 @@ namespace KubeExSite.Controllers
             var testList = new List<string>() { "Py", "C#", "Ruby", "Java" };
 
             return Ok(testList);
+        }
+
+        [HttpGet("gen-cookies")]
+        public IActionResult GenCookies()
+        {
+            _httpContextAccessor
+                .HttpContext?
+                .Response
+                .Cookies
+                .Append("TestCookie1", "true", new CookieOptions
+                {
+                    SameSite = SameSiteMode.Lax, Expires = DateTimeOffset.UtcNow + TimeSpan.FromMinutes(5)
+                });
+
+            return Ok();
         }
     }
 }
